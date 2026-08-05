@@ -1,0 +1,23 @@
+# PyCharm
+.idea/
+
+asset/华为云OrgID_API接口说明文档_中文版.pdf
+
+# Generated output
+output/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# Logs
+*.log
