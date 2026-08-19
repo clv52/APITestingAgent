@@ -1,0 +1,5 @@
+# API Testing Agent 的直接 Python 运行依赖。
+# pip 会自动安装这些包各自需要的传递依赖。
+mineru==3.4.4
+openai==2.52.0
+requests==2.34.2

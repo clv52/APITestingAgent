@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>API Test Agent Workbench</title>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <!-- 顶栏只展示当前会话身份；所有内容由 app.js 从 REST 状态刷新。 -->
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">A</span><span>API Test Agent</span></div>
+      <div id="task-identity" class="task-identity">
+        <span class="folder-glyph">▱</span>
+        <strong id="top-task-name">新任务</strong>
+        <span id="top-task-status" class="status-pill idle">可聊天</span>
+      </div>
+      <div class="top-actions">
+        <button id="new-task-button" class="ghost-button" type="button">＋ 新任务</button>
+        <div id="connection" class="connection"><span class="dot"></span><span>服务连接中</span></div>
+      </div>
+    </header>
+
+    <!-- 左侧是后端任务文件映射，中间是进度与 Agent 对话。 -->
+    <main>
+      <section id="workbench" class="workbench">
+        <aside class="explorer" aria-label="任务文件">
+          <div class="pane-header">
+            <div><p class="pane-kicker">WORKSPACE</p><h2>任务文件</h2></div>
+            <button id="refresh-files" class="icon-button" type="button" title="刷新文件">↻</button>
+          </div>
+          <nav id="file-tree" class="file-tree"><p class="empty-copy">点击“新任务”，在这里创建一个同级任务窗口。</p></nav>
+          <button id="report-link" class="report-file hidden" type="button"><span>◎</span><span>完整测试报告</span><b>双击打开</b></button>
+          <div class="storage-note"><span>⌁</span><p id="workspace-location">文件保存在后端任务目录；浏览器只传任务 ID 和相对路径。</p></div>
+        </aside>
+
+        <section class="chat-panel" aria-label="Agent 对话">
+          <section class="progress-card">
+            <div class="progress-heading">
+              <div><p class="pane-kicker">AGENT RUN</p><h3 id="progress-headline">等待上传接口 PDF</h3></div>
+              <strong id="progress-percent">0%</strong>
+            </div>
+            <div class="progress-track"><span id="progress-bar"></span></div>
+            <p id="progress-detail" class="progress-detail">PDF 将通过下方聊天框发送给后端 Agent</p>
+            <ol id="stage-list" class="stage-list"></ol>
+          </section>
+
+          <!-- PDF 是聊天框的可选附件，不是进入会话或发送文字的前置条件。 -->
+          <section class="conversation">
+            <header class="conversation-header">
+              <div class="assistant-avatar">A</div>
+              <div><h2>任务助手</h2><p>可创建任务并读取当前工作区文件</p></div>
+            </header>
+            <div id="chat-messages" class="chat-messages" aria-live="polite">
+              <article class="message assistant"><div class="bubble">你好，可以直接和我聊天。需要处理接口文档时，再点击聊天框左下角的“＋”附加 PDF。</div></article>
+            </div>
+            <div id="selected-context" class="selected-context hidden"><span>上下文</span><b id="selected-context-name">—</b><button id="clear-context" type="button">×</button></div>
+            <div id="attachment-card" class="attachment-card hidden">
+              <div class="attachment-summary">
+                <span class="pdf-badge">PDF</span>
+                <div><b id="attachment-name">—</b><small id="attachment-size">—</small></div>
+                <button id="remove-attachment" type="button" aria-label="移除附件">×</button>
+              </div>
+              <div class="attachment-settings">
+                <label><span>测试 Base URL（可选）</span><input id="attachment-base-url" type="url" placeholder="https://api.example.test" /></label>
+                <label class="compact-check"><input id="attachment-execute" type="checkbox" checked /><span>执行真实 HTTP 测试</span></label>
+              </div>
+            </div>
+            <div id="chat-suggestions" class="chat-suggestions">
+              <button type="button">当前任务进度如何？</button>
+              <button type="button">总结已生成的接口文件</button>
+              <button type="button">分析异常测试结果</button>
+            </div>
+            <!-- 一个 form 同时承载纯文字聊天、PDF 附件和测试环境选项。 -->
+            <form id="chat-form" class="composer">
+              <input id="chat-pdf" class="hidden-file-input" type="file" accept="application/pdf,.pdf" />
+              <textarea id="chat-input" rows="2" maxlength="8000" placeholder="输入任务要求，或点击＋附加接口 PDF…"></textarea>
+              <div class="composer-footer">
+                <div class="composer-tools">
+                  <button id="attach-pdf" class="attach-button" type="button" aria-label="附加 PDF" title="附加接口 PDF">＋</button>
+                  <span id="chat-state">DeepSeek · 可执行工作区 Agent</span>
+                </div>
+                <button id="send-chat" class="send-button" type="submit" aria-label="发送消息">↑</button>
+              </div>
+            </form>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <div id="session-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="session-modal-title">
+      <section class="session-modal">
+        <h2 id="session-modal-title">修改会话</h2>
+        <p id="session-modal-description"></p>
+        <label id="session-name-field" class="session-name-field"><span>会话名称</span><input id="session-name-input" type="text" maxlength="80" /></label>
+        <div class="modal-actions">
+          <button id="session-modal-cancel" class="ghost-button" type="button">取消</button>
+          <button id="session-modal-confirm" class="modal-confirm" type="button">确认</button>
+        </div>
+      </section>
+    </div>
+
+    <script src="/assets/marked.umd.js" defer></script>
+    <script src="/assets/app.js" defer></script>
+  </body>
+</html>
