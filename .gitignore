@@ -16,6 +16,11 @@ __pycache__/
 venv/
 env/
 
+# Frontend dependencies
+webapp/frontend/node_modules/
+node_modules/
+.pnpm-store/
+
 # Environment variables
 .env
 
