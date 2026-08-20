@@ -17,7 +17,7 @@ APITestAgent 基于 LLM Agent 技术，实现：
 
 ## Agent运行结果展示
 
-左侧区域展示 **APITestAgent 执行任务后自动生成的测试产物**。Agent根据接口文档完成接口解析、测试用例生成以及自动化测试执行流程，并针对每个接口生成对应的结构化文件，包括：
+上图左侧区域展示 **APITestAgent 执行任务后自动生成的测试产物**。Agent根据接口文档完成接口解析、测试用例生成以及自动化测试执行流程，并针对每个接口生成对应的结构化文件，包括：
 
 - **接口文档 Markdown 文件（xxx.md）**：解析后的接口信息，包含接口描述、请求方式、参数定义等内容；
 - **测试用例文件（xxx.json / xxx.xlsx）**：根据接口规范自动生成的测试场景，覆盖正常流程、参数边界、异常输入等测试类型；
@@ -31,8 +31,6 @@ APITestAgent 基于 LLM Agent 技术，实现：
 绿色框选区域为 **APITestAgent 对话式测试入口**。用户无需编写复杂测试脚本，只需通过自然语言向 Agent 提出测试需求，例如指定测试接口、异常场景或测试目标，Agent即可自动理解需求并执行对应的接口测试任务。
 
 该交互方式支持测试人员以对话形式驱动测试流程，实现 **“需求输入 → Agent规划 → 自动测试执行 → 结果分析”** 的智能化接口测试体验。
-
-
 
 ## Quick Start
 
@@ -58,7 +56,16 @@ conda activate apitestagent
 pip install -r requirements.txt
 ```
 
-### 4. 启动项目
+### 4、配置Token
+
+```bash
+cp .env.example .env
+
+#在.env文件填入你的Token
+DEEPSEEK_API_KEY=your deepseek_token
+```
+
+### 5. 启动项目
 
 ```bash
 python ./api_test_web.py
